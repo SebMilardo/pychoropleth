@@ -19,7 +19,7 @@ setup(name='pychoropleth',
     author='Sebastiano Milardo',
     author_email='milardo@mit.edu',
     license = 'MIT',
-    install_requires = ['mplleaflet','matplotlib','pandas','numpy','geopandas','shapely','osmnx','math','geopy','descartes','openpyxl'],
+    install_requires = ['mplleaflet','matplotlib','pandas','numpy','geopandas','shapely','osmnx','geopy','descartes','openpyxl'],
     url = 'https://github.com/SebMilardo/pychoropleth',
     zip_safe=False
     )
