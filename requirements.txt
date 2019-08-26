@@ -1,11 +1,9 @@
 mplleaflet
 matplotlib
-pandas
-numi
+numpy
 geopandas
 shapely
 osmnx
-math
 geopy
 descartes
 openpyxl
