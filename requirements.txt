@@ -1,0 +1,11 @@
+mplleaflet
+matplotlib
+pandas
+numi
+geopandas
+shapely
+osmnx
+math
+geopy
+descartes
+openpyxl
