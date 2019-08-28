@@ -14,9 +14,9 @@ classifiers = ['Development Status :: 3 - Alpha',
 
 
 setup(name='pychoropleth',
-    version='0.2dev',
+    version='0.2',
     description='A simple library to create choropleth maps from geopandas dataframes using mplleaflet',
-    packages=['pychoropleth',]
+    packages=['pychoropleth',],
     author='Sebastiano Milardo',
     author_email='milardo@mit.edu',
     license = 'MIT',
