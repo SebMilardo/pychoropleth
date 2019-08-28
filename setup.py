@@ -22,6 +22,6 @@ setup(name='pychoropleth',
     license = 'MIT',
     install_requires = ['mplleaflet','matplotlib','pandas','numpy','geopandas','shapely','osmnx','descartes'],
     url = 'https://github.com/SebMilardo/pychoropleth',
-    zip_safe=False
+    zip_safe=False,
     long_description=open('README.txt').read()
     )
