@@ -4,6 +4,5 @@ numpy
 geopandas
 shapely
 osmnx
-geopy
 descartes
-openpyxl
+pandas
