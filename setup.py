@@ -14,12 +14,14 @@ classifiers = ['Development Status :: 3 - Alpha',
 
 
 setup(name='pychoropleth',
-    version='0.2',
+    version='0.2dev',
     description='A simple library to create choropleth maps from geopandas dataframes using mplleaflet',
+    packages=['pychoropleth',]
     author='Sebastiano Milardo',
     author_email='milardo@mit.edu',
     license = 'MIT',
     install_requires = ['mplleaflet','matplotlib','pandas','numpy','geopandas','shapely','osmnx','descartes'],
     url = 'https://github.com/SebMilardo/pychoropleth',
     zip_safe=False
+    long_description=open('README.txt').read()
     )
