@@ -63,6 +63,18 @@ def _cell_id_to_polygon(cell_id, bounds, grid_size):
     return Polygon([[i,j],[i+grid_size,j],[i+grid_size,j+grid_size], [i,j+grid_size]])
 
 
+def create_grid(df, grid_size, bounds=None, latitude="latitude", longitude="longitude", column="latitude", crs=None, 
+                vmax=10):
+    gdf = df_to_gdf(df, latitude, longitude, crs)
+    bounds, gdf = _add_cell_id(gdf, grid_size, bounds)
+    grid = gdf.groupby("cell_id").count()
+    if len(grid) > 0:
+        grid["geometry"] = grid.apply(lambda x: _cell_id_to_polygon(x.name, bounds, grid_size),axis=1)
+        grid["color"] = grid[column].apply(lambda x: min(x,vmax)/vmax * 255)
+        grid = ox.project_gdf(geopandas.GeoDataFrame(grid, crs=gdf.crs),to_latlong=True)
+    return grid
+
+    
 def choropleth(df, grid_size,
                bounds=None, 
                latitude="latitude", 
@@ -74,18 +86,13 @@ def choropleth(df, grid_size,
                crs=None,
                figsize=None):
     if figsize is None:
-      figsize = [10,10] 
+        figsize = [10,10] 
     fig = plt.figure(figsize=figsize)
-
-    gdf = df_to_gdf(df, latitude, longitude, crs)
-    bounds, gdf = _add_cell_id(gdf, grid_size, bounds)
     
-    aggregated = gdf.groupby("cell_id").count()
-    if len(aggregated) > 0:
-      aggregated["geometry"] = aggregated.apply(lambda x: _cell_id_to_polygon(x.name, bounds, grid_size),axis=1)
-      aggregated["color"] = aggregated[column].apply(lambda x: min(x,vmax)/vmax * 255)
-      aggregated = ox.project_gdf(geopandas.GeoDataFrame(aggregated, crs=gdf.crs),to_latlong=True)
-      for idx, r in aggregated.iterrows():
-          color = plt.get_cmap(cmap).colors[int(r.color) if not np.isnan(r.color) else 0]
-          plt.gca().add_patch(PolygonPatch(r.geometry, alpha=0.5,color=color, zorder=2))
+    grid = create_grid(df, grid_size, bounds, latitude, longitude, column, crs, vmax)
+    
+    if len(grid) > 0:
+        for idx, r in grid.iterrows():
+            color = plt.get_cmap(cmap).colors[int(r.color) if not np.isnan(r.color) else 0]
+            plt.gca().add_patch(PolygonPatch(r.geometry, alpha=0.5,color=color, zorder=2))
     return mplleaflet.display(fig, tiles=tiles)
