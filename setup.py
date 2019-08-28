@@ -3,7 +3,7 @@ import setuptools
 
 
 setup(name='pychoropleth',
-    version='0.2.2',
+    version='0.2.3',
     description='A simple library to create choropleth maps from geopandas dataframes using mplleaflet',
     packages=setuptools.find_packages(),
     author='Sebastiano Milardo',
