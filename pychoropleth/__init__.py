@@ -63,6 +63,12 @@ def _cell_id_to_polygon(cell_id, bounds, grid_size):
     return Polygon([[i,j],[i+grid_size,j],[i+grid_size,j+grid_size], [i,j+grid_size]])
 
 
+def add_cell_id(df, grid_size, bounds=None):
+    gdf = df_to_gdf(df, latitude, longitude, crs)
+    bounds, gdf = _add_cell_id(gdf, grid_size, bounds)
+    return bounds, gdf
+
+
 def create_grid(df, grid_size, bounds=None, latitude="latitude", longitude="longitude", column=None, crs=None, 
                 vmax=10):
     gdf = df_to_gdf(df, latitude, longitude, crs)
