@@ -63,14 +63,15 @@ def _cell_id_to_polygon(cell_id, bounds, grid_size):
     return Polygon([[i,j],[i+grid_size,j],[i+grid_size,j+grid_size], [i,j+grid_size]])
 
 
-def create_grid(df, grid_size, bounds=None, latitude="latitude", longitude="longitude", column="latitude", crs=None, 
+def create_grid(df, grid_size, bounds=None, latitude="latitude", longitude="longitude", column=None, crs=None, 
                 vmax=10):
     gdf = df_to_gdf(df, latitude, longitude, crs)
     bounds, gdf = _add_cell_id(gdf, grid_size, bounds)
     grid = gdf.groupby("cell_id").count()
     if len(grid) > 0:
         grid["geometry"] = grid.apply(lambda x: _cell_id_to_polygon(x.name, bounds, grid_size),axis=1)
-        grid["color"] = grid[column].apply(lambda x: min(x,vmax)/vmax * 255)
+        if column is not None:
+            grid["color"] = grid[column].apply(lambda x: min(x,vmax)/vmax * 255)
         grid = ox.project_gdf(geopandas.GeoDataFrame(grid, crs=gdf.crs),to_latlong=True)
     return grid
 

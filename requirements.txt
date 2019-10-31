@@ -6,3 +6,4 @@ shapely
 osmnx
 descartes
 pandas
+pychoropleth
