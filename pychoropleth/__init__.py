@@ -87,7 +87,8 @@ def create_grid(df, grid_size, bounds=None, latitude="latitude", longitude="long
         grid["geometry"] = grid.apply(lambda x: _cell_id_to_polygon(x.name, bounds, grid_size),axis=1)
         if column is not None:
             grid["color"] = grid[column].apply(lambda x: min(x,vmax)/vmax * 255)
-    return ox.project_gdf(grid,to_latlong=True)
+        grid = ox.project_gdf(geopandas.GeoDataFrame(grid, crs=gdf.crs),to_latlong=True)
+    return grid
 
     
 def choropleth(df, grid_size,
