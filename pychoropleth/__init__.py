@@ -76,7 +76,7 @@ def bounds_to_polygon(bounds):
 def add_cell_id(df, grid_size, bounds=None, latitude="latitude", longitude="longitude", crs=None):
     gdf = df_to_gdf(df, latitude, longitude, crs)
     bounds, gdf = _add_cell_id(gdf, grid_size, bounds)
-    return bounds, gdf
+    return ox.project_geometry(bounds,gdf.crs,to_latlong=True), ox.project_gdf(gdf, to_latlong=True)
 
 
 def create_grid(df, grid_size, bounds=None, latitude="latitude", longitude="longitude", column=None, crs=None, 
