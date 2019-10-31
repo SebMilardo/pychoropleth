@@ -42,11 +42,11 @@ def _add_cell_id(gdf, grid_size, bounds=None):
         minx = gdf.geometry.dropna().x.min()
         maxy = gdf.geometry.dropna().y.max()
         miny = gdf.geometry.dropna().y.min()
-        bounds = [(minx,miny),(maxx,miny),(maxx,maxy),(minx,maxy),(minx,miny)]
+        bounds = Polygon([(minx,miny),(maxx,miny),(maxx,maxy),(minx,maxy),(minx,miny)])
         
     gdf = ox.project_gdf(gdf)
     crs = gdf.crs
-    box = ox.project_geometry(Polygon(bounds))[0]
+    box = ox.project_geometry(bounds)[0]
     bounds = box.bounds
 
     max_i = _coordinate_to_id(bounds[2], bounds[0], grid_size)
@@ -61,6 +61,14 @@ def _cell_id_to_polygon(cell_id, bounds, grid_size):
     i = bounds[0] + (cell_id[0]*grid_size)
     j = bounds[1] + (cell_id[1]*grid_size)
     return Polygon([[i,j],[i+grid_size,j],[i+grid_size,j+grid_size], [i,j+grid_size]])
+
+
+def bounds_to_polygon(bounds):
+    return Polygon([(bounds[0],bounds[1]),
+            (bounds[2],bounds[1]),
+            (bounds[2],bounds[3]),
+            (bounds[0],bounds[3]),
+            (bounds[0],bounds[1])])
 
 
 def add_cell_id(df, grid_size, bounds=None, latitude="latitude", longitude="longitude", crs=None):
