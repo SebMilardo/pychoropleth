@@ -54,7 +54,7 @@ def _add_cell_id(gdf, grid_size, bounds=None):
 
     cell_per_point = []
     gdf["cell_id"] = gdf.geometry.apply(lambda x: _geometry_to_id(x, bounds, grid_size, max_i, max_j))
-    return ox.project_geometry(bounds,crs,to_latlong=True), gdf
+    return ox.project_geometry(bounds_to_polygon(bounds),crs,to_latlong=True), gdf
 
 
 def _cell_id_to_polygon(cell_id, bounds, grid_size):
@@ -75,8 +75,7 @@ def bounds_to_polygon(bounds):
 
 def add_cell_id(df, grid_size, bounds=None, latitude="latitude", longitude="longitude", crs=None):
     gdf = df_to_gdf(df, latitude, longitude, crs)
-    bounds, gdf = _add_cell_id(gdf, grid_size, bounds)
-    return ox.project_geometry(bounds,gdf.crs,to_latlong=True), ox.project_gdf(gdf, to_latlong=True)
+    return _add_cell_id(gdf, grid_size, bounds)
 
 
 def create_grid(df, grid_size, bounds=None, latitude="latitude", longitude="longitude", column=None, crs=None, 
