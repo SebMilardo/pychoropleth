@@ -54,10 +54,12 @@ def _add_cell_id(gdf, grid_size, bounds=None):
 
     cell_per_point = []
     gdf["cell_id"] = gdf.geometry.apply(lambda x: _geometry_to_id(x, bounds, grid_size, max_i, max_j))
-    return bounds, gdf
+    return ox.project_geometry(bounds,crs,to_latlong=True), gdf
 
 
 def _cell_id_to_polygon(cell_id, bounds, grid_size):
+    box = ox.project_geometry(bounds)[0]
+    bounds = box.bounds
     i = bounds[0] + (cell_id[0]*grid_size)
     j = bounds[1] + (cell_id[1]*grid_size)
     return Polygon([[i,j],[i+grid_size,j],[i+grid_size,j+grid_size], [i,j+grid_size]])
