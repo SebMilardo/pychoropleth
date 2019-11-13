@@ -46,9 +46,10 @@ def _add_cell_id(gdf, grid_size, bounds=None, projected=False):
     
     if not projected:
         gdf = ox.project_gdf(gdf)
+        bounds = ox.project_geometry(bounds)[0]
+        
     crs = gdf.crs
-    box = ox.project_geometry(bounds)[0]
-    bounds = box.bounds
+    bounds = bounds.bounds
 
     max_i = _coordinate_to_id(bounds[2], bounds[0], grid_size)
     max_j = _coordinate_to_id(bounds[3], bounds[1], grid_size)
