@@ -43,8 +43,9 @@ def _add_cell_id(gdf, grid_size, bounds=None):
         maxy = gdf.geometry.dropna().y.max()
         miny = gdf.geometry.dropna().y.min()
         bounds = Polygon([(minx,miny),(maxx,miny),(maxx,maxy),(minx,maxy),(minx,miny)])
-        
-    gdf = ox.project_gdf(gdf)
+    
+    if gdf.crs["init"] == 'epsg:4326':
+        gdf = ox.project_gdf(gdf)
     crs = gdf.crs
     box = ox.project_geometry(bounds)[0]
     bounds = box.bounds
