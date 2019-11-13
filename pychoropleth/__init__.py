@@ -36,7 +36,7 @@ def _geometry_to_id(geometry, bounds, grid_size, max_i, max_j):
         return np.nan
 
     
-def _add_cell_id(gdf, grid_size, bounds=None):
+def _add_cell_id(gdf, grid_size, bounds=None, projected=False):
     if bounds is None:
         maxx = gdf.geometry.dropna().x.max()
         minx = gdf.geometry.dropna().x.min()
@@ -44,7 +44,7 @@ def _add_cell_id(gdf, grid_size, bounds=None):
         miny = gdf.geometry.dropna().y.min()
         bounds = Polygon([(minx,miny),(maxx,miny),(maxx,maxy),(minx,maxy),(minx,miny)])
     
-    if gdf.crs["init"] == 'epsg:4326':
+    if not projected:
         gdf = ox.project_gdf(gdf)
     crs = gdf.crs
     box = ox.project_geometry(bounds)[0]
@@ -74,9 +74,9 @@ def bounds_to_polygon(bounds):
             (bounds[0],bounds[1])])
 
 
-def add_cell_id(df, grid_size, bounds=None, latitude="latitude", longitude="longitude", crs=None):
+def add_cell_id(df, grid_size, bounds=None, latitude="latitude", longitude="longitude", crs=None, projected=False):
     gdf = df_to_gdf(df, latitude, longitude, crs)
-    bounds, crs, gdf = _add_cell_id(gdf, grid_size, bounds)
+    bounds, crs, gdf = _add_cell_id(gdf, grid_size, bounds, projected)
     return bounds, gdf
 
 
