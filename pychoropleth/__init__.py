@@ -45,8 +45,8 @@ def _add_cell_id(gdf, grid_size, bounds=None, projected=False):
         bounds = Polygon([(minx,miny),(maxx,miny),(maxx,maxy),(minx,maxy),(minx,miny)])
     
     if not projected:
-        gdf = ox.project_gdf(gdf)
-        bounds = ox.project_geometry(bounds)[0]
+        gdf = ox.projection.project_gdf(gdf)
+        bounds = ox.projection.project_geometry(bounds)[0]
         
     crs = gdf.crs
     bounds = bounds.bounds
@@ -56,11 +56,11 @@ def _add_cell_id(gdf, grid_size, bounds=None, projected=False):
 
     cell_per_point = []
     gdf["cell_id"] = gdf.geometry.apply(lambda x: _geometry_to_id(x, bounds, grid_size, max_i, max_j))
-    return ox.project_geometry(bounds_to_polygon(bounds),crs,to_latlong=True)[0], crs, ox.project_gdf(gdf, to_latlong=True)
+    return ox.projection.project_geometry(bounds_to_polygon(bounds),crs,to_latlong=True)[0], crs, ox.project_gdf(gdf, to_latlong=True)
 
 
 def _cell_id_to_polygon(cell_id, bounds, grid_size):
-    box = ox.project_geometry(bounds)[0]
+    box = ox.projection.project_geometry(bounds)[0]
     bounds = box.bounds
     i = bounds[0] + (cell_id[0]*grid_size)
     j = bounds[1] + (cell_id[1]*grid_size)
@@ -90,7 +90,7 @@ def create_grid(df, grid_size, bounds=None, latitude="latitude", longitude="long
         grid["geometry"] = grid.apply(lambda x: _cell_id_to_polygon(x.name, bounds, grid_size),axis=1)
         if column is not None:
             grid["color"] = grid[column].apply(lambda x: min(x,vmax)/vmax * 255)
-        grid = ox.project_gdf(geopandas.GeoDataFrame(grid, crs=crs),to_latlong=True)
+        grid = ox.projection.project_gdf(geopandas.GeoDataFrame(grid, crs=crs),to_latlong=True)
     return grid
 
     
